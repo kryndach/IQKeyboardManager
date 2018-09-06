@@ -83,7 +83,9 @@
     if (_previousBarButton == nil)
     {
         _previousBarButton = [[IQBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:nil action:nil];
+        _previousBarButton.accessibilityTraits = UIAccessibilityTraitButton;
         _previousBarButton.accessibilityLabel = @"Toolbar Previous Button";
+        _previousBarButton.accessibilityIdentifier = @"pickerwheel_previous";
     }
     
     return _previousBarButton;
@@ -94,7 +96,9 @@
     if (_nextBarButton == nil)
     {
         _nextBarButton = [[IQBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:nil action:nil];
+        _nextBarButton.accessibilityTraits = UIAccessibilityTraitButton;
         _nextBarButton.accessibilityLabel = @"Toolbar Next Button";
+        _nextBarButton.accessibilityIdentifier = @"pickerwheel_next";
     }
     
     return _nextBarButton;
@@ -116,7 +120,9 @@
     if (_doneBarButton == nil)
     {
         _doneBarButton = [[IQBarButtonItem alloc] initWithTitle:nil style:UIBarButtonItemStyleDone target:nil action:nil];
+        _doneBarButton.accessibilityTraits = UIAccessibilityTraitButton;
         _doneBarButton.accessibilityLabel = @"Toolbar Done Button";
+        _doneBarButton.accessibilityIdentifier = @"pickerwheel_done";
     }
     
     return _doneBarButton;
