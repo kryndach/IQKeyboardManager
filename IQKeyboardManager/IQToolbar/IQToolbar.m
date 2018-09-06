@@ -25,22 +25,14 @@
 #import "IQKeyboardManagerConstantsInternal.h"
 #import "IQUIView+Hierarchy.h"
 
-#import <UIKit/UIButton.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIViewController.h>
-
-@interface IQTitleBarButtonItem (PrivateAccessor)
-
-@property(nonatomic, strong) UIButton *titleButton;
-
-@end
 
 @implementation IQToolbar
 @synthesize previousBarButton = _previousBarButton;
 @synthesize nextBarButton = _nextBarButton;
 @synthesize titleBarButton = _titleBarButton;
 @synthesize doneBarButton = _doneBarButton;
-@synthesize fixedSpaceBarButton = _fixedSpaceBarButton;
 
 +(void)initialize
 {
@@ -86,22 +78,14 @@
     return self;
 }
 
--(void)dealloc
-{
-    self.items = nil;
-    _previousBarButton = nil;
-    _nextBarButton = nil;
-    _titleBarButton = nil;
-    _doneBarButton = nil;
-    _fixedSpaceBarButton = nil;
-}
-
 -(IQBarButtonItem *)previousBarButton
 {
     if (_previousBarButton == nil)
     {
         _previousBarButton = [[IQBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:nil action:nil];
+        _previousBarButton.accessibilityTraits = UIAccessibilityTraitButton;
         _previousBarButton.accessibilityLabel = @"Toolbar Previous Button";
+        _previousBarButton.accessibilityIdentifier = @"pickerwheel_previous";
     }
     
     return _previousBarButton;
@@ -112,7 +96,9 @@
     if (_nextBarButton == nil)
     {
         _nextBarButton = [[IQBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:nil action:nil];
+        _nextBarButton.accessibilityTraits = UIAccessibilityTraitButton;
         _nextBarButton.accessibilityLabel = @"Toolbar Next Button";
+        _nextBarButton.accessibilityIdentifier = @"pickerwheel_next";
     }
     
     return _nextBarButton;
@@ -133,34 +119,15 @@
 {
     if (_doneBarButton == nil)
     {
-        _doneBarButton = [[IQBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
+        _doneBarButton = [[IQBarButtonItem alloc] initWithTitle:nil style:UIBarButtonItemStyleDone target:nil action:nil];
+        _doneBarButton.accessibilityTraits = UIAccessibilityTraitButton;
         _doneBarButton.accessibilityLabel = @"Toolbar Done Button";
+        _doneBarButton.accessibilityIdentifier = @"pickerwheel_done";
     }
     
     return _doneBarButton;
 }
 
--(IQBarButtonItem *)fixedSpaceBarButton
-{
-    if (_fixedSpaceBarButton == nil)
-    {
-        _fixedSpaceBarButton = [[IQBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-#ifdef __IPHONE_11_0
-        if (@available(iOS 10.0, *))
-#else
-            if (IQ_IS_IOS10_OR_GREATER)
-#endif
-            {
-                [_fixedSpaceBarButton setWidth:6];
-            }
-            else
-            {
-                [_fixedSpaceBarButton setWidth:20];
-            }
-    }
-    
-    return _fixedSpaceBarButton;
-}
 
 -(CGSize)sizeThatFits:(CGSize)size
 {
@@ -175,16 +142,13 @@
 {
     [super setBarStyle:barStyle];
     
-    if (self.titleBarButton.selectableTitleColor == nil)
+    if (barStyle == UIBarStyleDefault)
     {
-        if (barStyle == UIBarStyleDefault)
-        {
-            [self.titleBarButton.titleButton setTitleColor:[UIColor colorWithRed:0.0 green:0.5 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
-        }
-        else
-        {
-            [self.titleBarButton.titleButton setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
-        }
+        [self.titleBarButton setSelectableTextColor:[UIColor colorWithRed:0.0 green:0.5 blue:1.0 alpha:1.0]];
+    }
+    else
+    {
+        [self.titleBarButton setSelectableTextColor:[UIColor yellowColor]];
     }
 }
 
@@ -213,7 +177,7 @@
         
         BOOL isTitleBarButtonFound = NO;
         
-        NSArray<UIView*> *subviews = [self.subviews sortedArrayUsingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
+        NSArray *subviews = [self.subviews sortedArrayUsingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
             
             CGFloat x1 = CGRectGetMinX(view1.frame);
             CGFloat y1 = CGRectGetMinY(view1.frame);
@@ -239,7 +203,7 @@
                 rightRect = barButtonItemView.frame;
                 break;
             }
-            else if (barButtonItemView == self.titleBarButton.customView)
+            else if ([barButtonItemView isMemberOfClass:[UIView class]])
             {
                 isTitleBarButtonFound = YES;
             }
@@ -250,44 +214,24 @@
             }
         }
         
-        CGFloat titleMargin = 16;
-
-        CGFloat maxWidth = CGRectGetWidth(self.frame) - titleMargin*2 - (CGRectIsNull(leftRect)?0:CGRectGetMaxX(leftRect)) - (CGRectIsNull(rightRect)?0:CGRectGetWidth(self.frame)-CGRectGetMinX(rightRect));
-        CGFloat maxHeight = self.frame.size.height;
-
-        CGSize sizeThatFits = [self.titleBarButton.customView sizeThatFits:CGSizeMake(maxWidth, maxHeight)];
-
-        CGRect titleRect = CGRectZero;
-
-        CGFloat x = titleMargin;
-
-        if (sizeThatFits.width > 0 && sizeThatFits.height > 0)
+        CGFloat x = 16;
+        
+        if (CGRectIsNull(leftRect) == false)
         {
-            CGFloat width = MIN(sizeThatFits.width, maxWidth);
-            CGFloat height = MIN(sizeThatFits.height, maxHeight);
-            
-            if (CGRectIsNull(leftRect) == false)
-            {
-                x = titleMargin + CGRectGetMaxX(leftRect) + ((maxWidth - width)/2);
-            }
-            
-            CGFloat y = (maxHeight - height)/2;
-            
-            titleRect = CGRectMake(x, y, width, height);
-        }
-        else
-        {
-            if (CGRectIsNull(leftRect) == false)
-            {
-                x = titleMargin + CGRectGetMaxX(leftRect);
-            }
-            
-            CGFloat width = CGRectGetWidth(self.frame) - titleMargin*2 - (CGRectIsNull(leftRect)?0:CGRectGetMaxX(leftRect)) - (CGRectIsNull(rightRect)?0:CGRectGetWidth(self.frame)-CGRectGetMinX(rightRect));
-            
-            titleRect = CGRectMake(x, 0, width, maxHeight);
+            x = CGRectGetMaxX(leftRect) + 16;
         }
         
-        self.titleBarButton.customView.frame = titleRect;
+        CGFloat width = CGRectGetWidth(self.frame) - 32 - (CGRectIsNull(leftRect)?0:CGRectGetMaxX(leftRect)) - (CGRectIsNull(rightRect)?0:CGRectGetWidth(self.frame)-CGRectGetMinX(rightRect));
+        
+        for (UIBarButtonItem *item in self.items)
+        {
+            if ([item isKindOfClass:[IQTitleBarButtonItem class]])
+            {
+                CGRect titleRect = CGRectMake(x, 0, width, self.frame.size.height);
+                item.customView.frame = titleRect;
+                break;
+            }
+        }
     }
 }
 
