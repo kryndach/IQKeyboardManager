@@ -194,6 +194,7 @@
         doneButton = [[IQBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStyleDone target:target action:action];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
     
@@ -266,6 +267,7 @@
         doneButton =[[IQBarButtonItem alloc] initWithTitle:text style:UIBarButtonItemStyleDone target:target action:action];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
 
@@ -337,6 +339,7 @@
         doneButton =[[IQBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:target action:action];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
     
@@ -433,6 +436,7 @@
         doneButton =[[IQBarButtonItem alloc] initWithTitle:rightTitle style:UIBarButtonItemStyleDone target:target action:rightAction];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
 
@@ -514,6 +518,7 @@
         doneButton =[[IQBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:target action:doneAction];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
 
@@ -679,6 +684,7 @@
         doneButton =[[IQBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:target action:doneAction];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
 
@@ -852,6 +858,7 @@
         doneButton = [[IQBarButtonItem alloc] initWithImage:rightButtonImage style:UIBarButtonItemStyleDone target:target action:rightButtonAction];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
 
@@ -1018,6 +1025,7 @@
         doneButton =[[IQBarButtonItem alloc] initWithTitle:rightButtonTitle style:UIBarButtonItemStyleDone target:target action:rightButtonAction];
         doneButton.invocation = toolbar.doneBarButton.invocation;
         doneButton.accessibilityLabel = toolbar.doneBarButton.accessibilityLabel;
+        doneButton.accessibilityIdentifier = toolbar.doneBarButton.accessibilityIdentifier;
         toolbar.doneBarButton = doneButton;
     }
 
